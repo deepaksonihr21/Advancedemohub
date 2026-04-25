@@ -15,6 +15,59 @@
             --urgency-red: #ff4757;
         }
 
+        /* --- 🔥 RESPONSIVE TRACKER (Phone + Laptop Optimized) --- */
+        .page-tracker {
+            position: fixed;
+            z-index: 1000;
+            background: rgba(15, 0, 30, 0.4); 
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s ease;
+        }
+
+        /* Phone Layout (Niche Center) */
+        @media (max-width: 768px) {
+            .page-tracker {
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 50px;
+                flex-direction: row;
+            }
+            .tracker-text { font-size: 0.6rem; letter-spacing: 1px; margin-bottom: 0; writing-mode: horizontal-tb; }
+        }
+
+        /* Laptop Layout (Right Center - Original) */
+        @media (min-width: 769px) {
+            .page-tracker {
+                right: 30px;
+                top: 50%;
+                transform: translateY(-50%);
+                flex-direction: column;
+                border-radius: 30px;
+            }
+            .tracker-text { 
+                writing-mode: vertical-rl; 
+                font-size: 0.7rem; 
+                margin-bottom: 10px; 
+            }
+        }
+
+        .tracker-text { font-weight: 800; color: var(--secondary); text-transform: uppercase; }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
+        
+        .dot.active { 
+            background: var(--accent); 
+            box-shadow: 0 0 15px var(--accent); 
+        }
+        @media (max-width: 768px) { .dot.active { width: 15px; height: 6px; border-radius: 10px; } }
+        @media (min-width: 769px) { .dot.active { height: 25px; width: 6px; border-radius: 10px; } }
+
+        /* --- Base Styles --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
@@ -26,9 +79,9 @@
             align-items: center;
             background: radial-gradient(circle at 50% -20%, #1e003d, #030005);
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* --- 1. Top Bar --- */
         .top-info-bar {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
@@ -47,26 +100,34 @@
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* --- 2. Hero Section --- */
         .hero { text-align: center; padding: 80px 20px 40px; }
         .hero h1 { font-size: clamp(2.5rem, 10vw, 4.5rem); font-weight: 800; line-height: 1; margin-bottom: 20px; text-transform: uppercase; }
         .hero h1 span { color: var(--secondary); }
         .hero p { color: #888; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
-        /* --- 3. Main Reel --- */
+        /* --- 🎯 ADJUSTED VIDEO CONTAINER FOR SQUARE/CUSTOM RATIO --- */
         .main-reel {
             width: 90%;
-            max-width: 400px;
-            aspect-ratio: 9/16;
-            margin: 40px 0;
+            max-width: 480px; /* Thoda wide kiya square ke liye */
+            /* aspect-ratio: 9/16; Hata diya taaki video apni shape le le */
+            margin: 40px auto 80px;
             border-radius: 35px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: flex; /* Video center alignment */
+            justify-content: center;
+            align-items: center;
+            background: #000; /* Taaki agar ratio thoda off ho toh black bars dikhein cut hone ki jagah */
         }
-        .main-reel video { width: 100%; height: 100%; object-fit: cover; }
+        
+        .main-reel video { 
+            width: 100%; 
+            height: auto; /* Video apni original height pick karega */
+            object-fit: contain; /* Pura video dikhega bina cut hue */
+            display: block;
+        }
 
-        /* --- 4. CTA Area --- */
         .cta-container { text-align: center; margin-bottom: 80px; }
         
         .cta-button {
@@ -95,14 +156,13 @@
             text-transform: uppercase;
         }
 
-        /* --- 5. Benefits Grid --- */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
             width: 90%;
             max-width: 1200px;
-            padding-bottom: 100px;
+            padding-bottom: 60px;
         }
 
         .card {
@@ -124,7 +184,39 @@
         .card span { font-size: 0.75rem; font-weight: 400; color: #666; text-transform: none; }
         .card:hover { border-color: var(--accent); transform: translateY(-10px); background: rgba(255, 255, 255, 0.08); }
 
-        /* --- 6. Footer --- */
+        .view-next-wrapper {
+            margin: 40px 0 80px 0; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .view-next-btn {
+            background: transparent;
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+        }
+
+        .scroll-line {
+            width: 1px; height: 50px;
+            background: linear-gradient(to bottom, var(--secondary), transparent);
+            position: relative; overflow: hidden;
+        }
+        .scroll-line::after {
+            content: ''; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+            background: #fff; animation: scrollMove 2s infinite;
+        }
+        @keyframes scrollMove { 0% { top: -100%; } 100% { top: 100%; } }
+
         footer {
             text-align: center;
             padding: 60px 20px;
@@ -134,6 +226,14 @@
     </style>
 </head>
 <body>
+
+    <div class="page-tracker">
+        <span class="tracker-text">1 OF 4</span>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
 
     <div class="top-info-bar">
         <span class="handle">@yourname_here</span> | Code: <span class="highlight">Your Custom Code</span> | <span class="fomo">LIMITED SLOTS: 3 THIS WEEK</span>
@@ -146,7 +246,7 @@
 
     <div class="main-reel">
         <video autoplay muted loop playsinline>
-            <source src="v1.mp4" type="video/mp4">
+            <source src="A1.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -155,16 +255,20 @@
             Start Building Your Brand Today 🚀
         </a>
         <span class="no-templates">⚡ No templates • Fully customized for you</span>
-        <span class="no-templates">⚡ For creators, coaches, editors & influencers</span>
     </div>
 
-    <div class="grid-container">
+    <div class="grid-container" id="benefits">
         <div class="card">💰 Sell Your Products <span>Digital or physical, fully automated.</span></div> 
         <div class="card">📦 Showcase Services <span>Coaching, editing, or consulting.</span></div>
         <div class="card">📈 Convert Followers <span>Turn views into real income.</span></div>
         <div class="card">👑 Build Authority <span>Stand out in your niche.</span></div>
         <div class="card">🎥 Showcase Content <span>Reels, YouTube & portfolio.</span></div>
         <div class="card">📲 Direct Leads <span>DM, email, or WhatsApp integration.</span></div>
+    </div>
+
+    <div class="view-next-wrapper">
+        <a href="https://deepaksonihr21.github.io/Advancedemohub/d2/" class="view-next-btn">See Next Style</a>
+        <div class="scroll-line"></div>
     </div>
 
     <footer>
